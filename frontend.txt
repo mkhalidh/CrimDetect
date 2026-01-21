@@ -1,0 +1,22 @@
+client/
+│── src/
+│   ├── components/
+│   │   ├── auth/
+│   │   ├── admin/
+│   │   ├── user/
+│   │   ├── detection/
+│   │   └── common/
+│   ├── pages/
+│   │   ├── AdminDashboard.jsx
+│   │   ├── UserDashboard.jsx
+│   │   ├── Login.jsx
+│   │   └── Register.jsx
+│   ├── services/
+│   │   ├── api.js
+│   │   └── authService.js
+│   ├── hooks/
+│   ├── utils/
+│   ├── App.jsx
+│   └── main.jsx
+│── tailwind.config.js
+│── package.json
