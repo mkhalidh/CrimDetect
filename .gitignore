@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Production
+client/dist/
+client/dist-ssr/
+
+# Environment
+.env
+server/.env
+client/.env.local
+
+# Debug and Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+db_verify_out.txt
+fix-status.sql
+fix-status.js
+verify-data.js
+debug-db.js
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Uploads
+server/src/uploads/*
+!server/src/uploads/.gitkeep

@@ -1,0 +1,35 @@
+server/
+│── src/
+│   ├── config/
+│   │   ├── db.js
+│   │   ├── jwt.js
+│   │   └── multer.js
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Person.js
+│   │   ├── CriminalRecord.js
+│   │   ├── Warning.js
+│   │   ├── Claim.js
+│   │   └── DetectionLog.js
+│   ├── controllers/
+│   │   ├── authController.js
+│   │   ├── adminController.js
+│   │   ├── userController.js
+│   │   └── detectionController.js
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   ├── adminRoutes.js
+│   │   ├── userRoutes.js
+│   │   └── detectionRoutes.js
+│   ├── middlewares/
+│   │   ├── authMiddleware.js
+│   │   ├── roleMiddleware.js
+│   │   └── errorMiddleware.js
+│   ├── utils/
+│   │   ├── faceMatcher.js
+│   │   ├── ruleEngine.js
+│   │   └── response.js
+│   ├── uploads/
+│   └── app.js
+│── package.json
+│── .env
