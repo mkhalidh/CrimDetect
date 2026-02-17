@@ -19,6 +19,8 @@ const adminRoutes = require('./routes/adminRoutes');
 const userRoutes = require('./routes/userRoutes');
 const detectionRoutes = require('./routes/detectionRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const complaintRoutes = require('./routes/complaintRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 // Import middleware
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
@@ -73,6 +75,8 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/detect', detectionRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/complaints', complaintRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // ============================================
 // Error Handling

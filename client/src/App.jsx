@@ -19,6 +19,10 @@ import FaceDetection from './pages/FaceDetection';
 import UserProfile from './pages/UserProfile';
 import Portfolio from './pages/Portfolio';
 import NotFound from './pages/NotFound';
+import ComplaintSubmission from './pages/ComplaintSubmission';
+import AdminComplaints from './pages/AdminComplaints';
+import AnalyticsDashboard from './pages/AnalyticsDashboard';
+import MyComplaints from './pages/MyComplaints';
 
 // Components
 import Layout from './components/common/Layout';
@@ -151,12 +155,33 @@ function App() {
                             </Layout>
                         </ProtectedRoute>
                     } />
+                    <Route path="/admin/complaints" element={
+                        <ProtectedRoute adminOnly>
+                            <Layout>
+                                <AdminComplaints />
+                            </Layout>
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/admin/analytics" element={
+                        <ProtectedRoute adminOnly>
+                            <Layout>
+                                <AnalyticsDashboard />
+                            </Layout>
+                        </ProtectedRoute>
+                    } />
 
                     {/* User Routes */}
                     <Route path="/dashboard" element={
                         <ProtectedRoute>
                             <Layout>
                                 <UserDashboard />
+                            </Layout>
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/complaint" element={
+                        <ProtectedRoute>
+                            <Layout>
+                                <ComplaintSubmission />
                             </Layout>
                         </ProtectedRoute>
                     } />
@@ -171,6 +196,20 @@ function App() {
                         <ProtectedRoute>
                             <Layout>
                                 <FaceDetection />
+                            </Layout>
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/analytics" element={
+                        <ProtectedRoute>
+                            <Layout>
+                                <AnalyticsDashboard />
+                            </Layout>
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/my-complaints" element={
+                        <ProtectedRoute>
+                            <Layout>
+                                <MyComplaints />
                             </Layout>
                         </ProtectedRoute>
                     } />

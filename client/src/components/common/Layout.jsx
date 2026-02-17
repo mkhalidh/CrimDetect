@@ -25,12 +25,17 @@ import NotificationCenter from './NotificationCenter';
 const adminNavItems = [
     { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/admin/criminals', label: 'Criminals', icon: Users },
+    { path: '/admin/complaints', label: 'Complaints', icon: FileText },
+    { path: '/admin/analytics', label: 'Analytics', icon: Shield },
     { path: '/admin/claims', label: 'Claims', icon: FileText },
     { path: '/admin/detection', label: 'Face Detection', icon: Camera },
 ];
 
 const userNavItems = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/complaint', label: 'Report Crime', icon: FileText },
+    { path: '/my-complaints', label: 'My Complaints', icon: FileText },
+    { path: '/analytics', label: 'Analytics', icon: Shield },
     { path: '/profile', label: 'Profile', icon: User },
     { path: '/detection', label: 'Face Detection', icon: Camera },
 ];
