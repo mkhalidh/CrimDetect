@@ -7,6 +7,26 @@ import complaintService from '../services/complaintService';
 import { Loader2, MapPin, Upload, X } from 'lucide-react';
 
 const categories = ['Theft', 'Snatching', 'Harassment', 'Traffic Violation', 'Other'];
+const karachiTowns = [
+    'Baldia Town',
+    'Bin Qasim Town',
+    'Gadap Town',
+    'Gulberg Town',
+    'Gulshan Iqbal Town',
+    'Jamshaid Town',
+    'Kemari Town',
+    'Korangi Town',
+    'Landhi Town',
+    'Liaqatabad Town',
+    'Liyari Town',
+    'Malir Town',
+    'New Karachi Town',
+    'North Nazimabad Town',
+    'Orangi Town',
+    'Saddar Town',
+    'Shah Faisal Town',
+    'Site Town'
+];
 
 export default function ComplaintSubmission() {
     const { toast } = useToast();
@@ -30,8 +50,8 @@ export default function ComplaintSubmission() {
         try {
             await complaintService.submitComplaint(formData);
             toast({
-                title: 'Success',
-                description: 'Complaint submitted successfully!',
+                title: 'Submission Success! ✅',
+                description: 'Your complaint has been recorded and is pending review by the authorities.',
                 variant: 'success',
             });
             setFormData({
@@ -173,12 +193,17 @@ export default function ComplaintSubmission() {
                             </div>
                             <div>
                                 <label className="text-sm font-medium mb-1 block">Area</label>
-                                <Input
+                                <select
+                                    className="w-full h-10 px-3 rounded-md border bg-background text-sm"
                                     value={formData.location_area}
                                     onChange={(e) => setFormData({ ...formData, location_area: e.target.value })}
-                                    placeholder="e.g. Saddar"
                                     required
-                                />
+                                >
+                                    <option value="">Select Area</option>
+                                    {karachiTowns.map(town => (
+                                        <option key={town} value={town}>{town}</option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
 

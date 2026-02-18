@@ -34,8 +34,8 @@ export default function AdminComplaints() {
         try {
             await complaintService.verifyComplaint(id, action);
             toast({
-                title: 'Success',
-                description: `Complaint ${action}ed`,
+                title: 'Action Successful',
+                description: `Complaint #${id.toString().slice(-4)} has been ${action === 'approve' ? 'approved' : 'rejected'} successfully.`,
                 variant: 'success'
             });
             fetchComplaints();

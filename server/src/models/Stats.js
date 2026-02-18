@@ -10,12 +10,17 @@ const Stats = {
      * Increment crime count for an area and category
      */
     async increment(country, city, area, category) {
+        // Normalize area name to Title Case for consistency
+        const normalizedArea = area.trim().toLowerCase().split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+
         const sql = `
             INSERT INTO area_category_stats (country, city, area, category, crime_count)
             VALUES (?, ?, ?, ?, 1)
             ON DUPLICATE KEY UPDATE crime_count = crime_count + 1, last_update = NOW()
         `;
-        const result = await query(sql, [country, city, area, category]);
+        const result = await query(sql, [country, city, normalizedArea, category]);
         return result;
     },
 

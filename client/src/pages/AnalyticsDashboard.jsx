@@ -18,6 +18,7 @@ export default function AnalyticsDashboard() {
         stackedData: []
     });
     const [selectedArea, setSelectedArea] = useState('All');
+    const [selectedCategory, setSelectedCategory] = useState('All');
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -43,7 +44,9 @@ export default function AnalyticsDashboard() {
     // Filter logic for Pie Chart
     let filteredCategoryStats = stats.categoryStats;
     if (selectedArea !== 'All' && stats.stackedData) {
-        const areaData = stats.stackedData.find(item => item.name === selectedArea);
+        const areaData = stats.stackedData.find(item =>
+            item.name && item.name.trim().toLowerCase() === selectedArea.trim().toLowerCase()
+        );
         if (areaData) {
             filteredCategoryStats = categories.map(cat => ({
                 category: cat,
@@ -56,10 +59,21 @@ export default function AnalyticsDashboard() {
 
     // Default center (Karachi)
     let center = [24.8607, 67.0011];
-    if (selectedArea !== 'All' && stats.areaStats) {
-        const areaCoord = stats.areaStats.find(a => a.area === selectedArea);
-        if (areaCoord && areaCoord.latitude) {
-            center = [areaCoord.latitude, areaCoord.longitude];
+    if (selectedArea !== 'All') {
+        // Find the feature in GeoJSON to get its official center
+        const feature = karachiFullDistricts.features.find(f =>
+            f.properties.name.trim().toLowerCase() === selectedArea.trim().toLowerCase()
+        );
+        if (feature) {
+            center = [feature.properties.center_lat, feature.properties.center_lon];
+        } else if (stats.areaStats) {
+            // Fallback to complaint average
+            const areaCoord = stats.areaStats.find(a =>
+                a.area && a.area.trim().toLowerCase() === selectedArea.trim().toLowerCase()
+            );
+            if (areaCoord && areaCoord.latitude) {
+                center = [areaCoord.latitude, areaCoord.longitude];
+            }
         }
     } else if (stats.areaStats && stats.areaStats.length > 0 && stats.areaStats[0].latitude) {
         center = [stats.areaStats[0].latitude, stats.areaStats[0].longitude];
@@ -101,6 +115,17 @@ export default function AnalyticsDashboard() {
                             Delete Area Data
                         </button>
                     )}
+                    <select
+                        className="h-10 px-3 rounded-md border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 min-w-[150px]"
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
+                        <option value="All">All Categories</option>
+                        {categories.map(cat => (
+                            <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                    </select>
+
                     <select
                         className="h-10 px-3 rounded-md border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 min-w-[150px]"
                         value={selectedArea}
@@ -167,14 +192,16 @@ export default function AnalyticsDashboard() {
                                     <YAxis dataKey="name" type="category" width={100} />
                                     <Tooltip />
                                     <Legend />
-                                    {categories.map((cat, index) => (
-                                        <Bar
-                                            key={cat}
-                                            dataKey={cat}
-                                            stackId="a"
-                                            fill={COLORS[index % COLORS.length]}
-                                        />
-                                    ))}
+                                    {categories
+                                        .filter(cat => selectedCategory === 'All' || cat === selectedCategory)
+                                        .map((cat, index) => (
+                                            <Bar
+                                                key={cat}
+                                                dataKey={cat}
+                                                stackId="a"
+                                                fill={COLORS[categories.indexOf(cat) % COLORS.length]}
+                                            />
+                                        ))}
                                 </BarChart>
                             </ResponsiveContainer>
                         ) : (
@@ -199,23 +226,24 @@ export default function AnalyticsDashboard() {
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 />
                                 <GeoJSON
-                                    // ... existing GeoJSON props
+                                    key={`geojson-${selectedCategory}-${JSON.stringify(stats.stackedData)}`}
                                     data={karachiFullDistricts}
                                     style={(feature) => {
                                         const areaName = feature.properties.name;
-                                        const matchArea = (dbName, geoName) => {
-                                            const d = dbName.trim().toLowerCase();
-                                            const g = geoName.trim().toLowerCase();
-                                            return d === g || d.includes(g) || g.includes(d);
-                                        };
-
                                         let count = 0;
+
                                         if (stats.stackedData) {
-                                            const foundData = stats.stackedData.find(d => matchArea(d.name, areaName));
+                                            const foundData = stats.stackedData.find(d =>
+                                                d.name && d.name.trim().toLowerCase() === areaName.trim().toLowerCase()
+                                            );
                                             if (foundData) {
-                                                count = Object.keys(foundData)
-                                                    .filter(k => k !== 'name')
-                                                    .reduce((sum, key) => sum + (parseInt(foundData[key]) || 0), 0);
+                                                if (selectedCategory === 'All') {
+                                                    count = Object.keys(foundData)
+                                                        .filter(k => k !== 'name')
+                                                        .reduce((sum, key) => sum + (parseInt(foundData[key]) || 0), 0);
+                                                } else {
+                                                    count = parseInt(foundData[selectedCategory]) || 0;
+                                                }
                                             }
                                         }
 
@@ -238,22 +266,22 @@ export default function AnalyticsDashboard() {
                                     }}
                                     onEachFeature={(feature, layer) => {
                                         const areaName = feature.properties.name;
-                                        const matchArea = (dbName, geoName) => {
-                                            const d = dbName.trim().toLowerCase();
-                                            const g = geoName.trim().toLowerCase();
-                                            return d === g || d.includes(g) || g.includes(d);
-                                        };
-
                                         let count = 0;
                                         let details = {};
 
                                         if (stats.stackedData) {
-                                            const foundData = stats.stackedData.find(d => matchArea(d.name, areaName));
+                                            const foundData = stats.stackedData.find(d =>
+                                                d.name && d.name.trim().toLowerCase() === areaName.trim().toLowerCase()
+                                            );
                                             if (foundData) {
                                                 details = foundData;
-                                                count = Object.keys(foundData)
-                                                    .filter(k => k !== 'name')
-                                                    .reduce((sum, key) => sum + (parseInt(foundData[key]) || 0), 0);
+                                                if (selectedCategory === 'All') {
+                                                    count = Object.keys(foundData)
+                                                        .filter(k => k !== 'name')
+                                                        .reduce((sum, key) => sum + (parseInt(foundData[key]) || 0), 0);
+                                                } else {
+                                                    count = parseInt(foundData[selectedCategory]) || 0;
+                                                }
                                             }
                                         }
 

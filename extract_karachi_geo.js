@@ -29,22 +29,26 @@ try {
 
     console.log(`Found ${karachiFeatures.length} Karachi ADM3 features.`);
 
-    // Log unique ADM2 names found
-    const adm2Names = [...new Set(karachiFeatures.map(f => f.properties.adm2_name))];
-    console.log('ADM2 Names included:', adm2Names);
+    // Sort by area descending so smaller polygons are drawn later (on top)
+    const sortedFeatures = karachiFeatures
+        .sort((a, b) => (b.properties.area_sqkm || 0) - (a.properties.area_sqkm || 0))
+        .map(f => ({
+            type: "Feature",
+            properties: {
+                name: f.properties.adm3_name,
+                adm2: f.properties.adm2_name,
+                adm3: f.properties.adm3_name,
+                id: f.properties.adm3_pcode,
+                area: f.properties.area_sqkm,
+                center_lat: f.properties.center_lat,
+                center_lon: f.properties.center_lon
+            },
+            geometry: f.geometry
+        }));
 
     const outputData = {
         type: "FeatureCollection",
-        features: karachiFeatures.map(f => ({
-            type: "Feature",
-            properties: {
-                name: f.properties.adm3_name, // Map to 'name' for compatibility
-                adm2: f.properties.adm2_name,
-                adm3: f.properties.adm3_name,
-                id: f.properties.adm3_pcode
-            },
-            geometry: f.geometry
-        }))
+        features: sortedFeatures
     };
 
     // Ensure directories exist
