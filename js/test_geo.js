@@ -1,4 +1,4 @@
-const geoUtils = require('./server/src/utils/geoUtils');
+const geoUtils = require('../server/src/utils/geoUtils');
 
 // Test coordinates for Saddar area (approx)
 const lat = 24.8607;

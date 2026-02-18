@@ -7,7 +7,7 @@ async function migrate() {
     try {
         console.log('Starting migration...');
 
-        const schemaPath = path.join(__dirname, '../complaints_schema.sql');
+        const schemaPath = path.join(__dirname, '../extras/complaints_schema.sql');
         const sql = fs.readFileSync(schemaPath, 'utf8');
 
         // Split by semicolon but ignore empty lines
